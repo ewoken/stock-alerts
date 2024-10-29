@@ -2,12 +2,12 @@ import datetime
 from zoneinfo import ZoneInfo
 import yfinance as yf
 from itertools import groupby
-import alerts
+import alert_service
 import database
 import telegram
 
 now = datetime.datetime.now(tz=ZoneInfo("Europe/Paris"))
-is_first_run_of_day = alerts.is_first_run_of_day(now)
+is_first_run_of_day = alert_service.is_first_run_of_day(now)
 
 # data from yfinance is available with a delay of 15 minutes
 if (now.hour < 9 or now.hour > 17 or 
@@ -23,7 +23,7 @@ if is_first_run_of_day:
     telegram.send_message(f'Good morning ! {len(all_alerts)} alerts registered')
     database.delete_all_notifications(db)
 
-for symbol, alerts in groupby(all_alerts, lambda x: x['symbol']):
-    alerts.handle_symbol_alerts(symbol, list(alerts))
+for symbol, alert_service in groupby(all_alerts, lambda x: x['symbol']):
+    alert_service.handle_symbol_alerts(symbol, list(alert_service))
 
 print('Done !')
