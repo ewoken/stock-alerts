@@ -23,7 +23,7 @@ if is_first_run_of_day:
     telegram.send_message(f'Good morning ! {len(all_alerts)} alerts registered')
     database.delete_all_notifications(db)
 
-for symbol, alert_service in groupby(all_alerts, lambda x: x['symbol']):
-    alert_service.handle_symbol_alerts(symbol, list(alert_service))
+for symbol, alerts in groupby(all_alerts, lambda x: x['symbol']):
+    alert_service.handle_symbol_alerts(symbol, list(alerts))
 
 print('Done !')
