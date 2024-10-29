@@ -3,6 +3,12 @@ import yfinance as yf
 import telegram
 import database
 
+indicator_types = [
+    "price",
+    'mean_price_ratio',
+    'mean_volume_ratio',
+]
+
 # data from yfinance is available with a delay of 15 minutes
 def is_first_run_of_day(now):
     return now.hour == 9 and now.minute < 10
@@ -22,6 +28,7 @@ def send_message_alert(alert, date, db):
             database.save_notification(db, alert_id)
 
 def detect_price_alert(alert, data, db):
+    print(f'Computing alert {alert["_id"]}')
     if alert['direction'] == 'up':
         detected = (data['LastPrice'] < alert['value']) & (data['High'] >= alert['value'])
     elif alert['direction'] == 'down':
@@ -51,7 +58,8 @@ def handle_symbol_alerts(symbol, alerts, now, db=None):
         data.at[data.index[0], 'LastPrice'] = last_price
 
     for alert in alerts:
-        detect_price_alert(alert, data, db)
+        if alert['indicator'] == 'price':
+            detect_price_alert(alert, data, db)
 
 
 def get_link(symbol):
