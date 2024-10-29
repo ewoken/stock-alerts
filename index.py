@@ -1,32 +1,29 @@
 import datetime
 from zoneinfo import ZoneInfo
-import os
-import requests
 import yfinance as yf
-from pymongo.mongo_client import MongoClient
+from itertools import groupby
+import alerts
+import database
+import telegram
 
 now = datetime.datetime.now(tz=ZoneInfo("Europe/Paris"))
-MONGO_URI = os.getenv("MONGO_URI")
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") 
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+is_first_run_of_day = alerts.is_first_run_of_day(now)
 
-mongo = MongoClient(MONGO_URI)
-db = mongo['stock-alerts-app']
-stockAlertsCollection = db['stock-alerts']
+# data from yfinance is available with a delay of 15 minutes
+if (now.hour < 9 or now.hour > 17 or 
+    (now.hour == 9 and now.minute < 15) or
+    (now.hour == 17 and now.minute > 50)):
+    print("Market is closed")
+    exit()
 
-def send_message(message):
-    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    requests.post(url, {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "text": message
-    })
+db = database.get_database()
+all_alerts = database.get_all_alerts(db)
 
-all_alerts = stockAlertsCollection.find({}).to_list(None)
+if is_first_run_of_day:
+    telegram.send_message(f'Good morning ! {len(all_alerts)} alerts registered')
+    database.delete_all_notifications(db)
 
-if now.hour == 9 and now.minute < 5:
-    send_message(f'Good morning ! {len(all_alerts)} alerts registered')
-
-for alert in all_alerts:
-    print(alert)
+for symbol, alerts in groupby(all_alerts, lambda x: x['symbol']):
+    alerts.handle_symbol_alerts(symbol, list(alerts))
 
 print('Done !')
