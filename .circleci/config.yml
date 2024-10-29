@@ -4,10 +4,10 @@ orbs:
 
 jobs:
   send-alerts:
-    docker:
-      - image: circleci/python:3.7.4
+    executor: python/default
     steps:
       - checkout
+      - run: pip install --upgrade pip
       - python/install-packages:
         pkg-manager: pip
       - run:
