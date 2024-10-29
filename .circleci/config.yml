@@ -1,0 +1,15 @@
+version: 2.1
+orbs:
+  python: circleci/python@2.0.3
+
+jobs:
+  send-alerts:
+    docker:
+      - image: circleci/python:3.7.4
+    steps:
+      - checkout
+      - python/install-packages:
+        pkg-manager: pip
+      - run:
+          command: |
+            python index.py
