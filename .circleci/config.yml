@@ -13,3 +13,8 @@ jobs:
       - run:
           command: |
             python index.py
+
+workflows:
+  send-alerts-workflow:
+    jobs:
+      - send-alerts
