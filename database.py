@@ -18,3 +18,12 @@ def save_notification(db, alert_id):
 
 def delete_all_notifications(db):
     db['notifications'].delete_many({})
+
+def save_aggregates(db, aggregates):
+    db['aggregates'].insert_many(aggregates)
+
+def get_all_aggregates(db):
+    return db['aggregates'].find({}).to_list(None)
+
+def delete_all_aggregates(db):
+    db['aggregates'].delete_many({})

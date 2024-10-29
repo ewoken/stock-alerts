@@ -12,7 +12,7 @@ is_first_run_of_day = alert_service.is_first_run_of_day(now)
 # data from yfinance is available with a delay of 15 minutes
 if (now.hour < 9 or now.hour > 17 or 
     (now.hour == 9 and now.minute < 15) or
-    (now.hour == 17 and now.minute > 50)):
+    (now.hour == 17 and now.minute > 55)): # should be 50 but add a margin
     print("Market is closed")
     exit()
 

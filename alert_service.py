@@ -44,8 +44,8 @@ def handle_symbol_alerts(symbol, alerts, now, db=None):
     is_first = is_first_run_of_day(now)
     stock = yf.Ticker(symbol)
     data = stock.history(
-        start=now - datetime.timedelta(minutes=25),
-        end=now - datetime.timedelta(minutes=15),
+        start=now - datetime.timedelta(minutes=35), # should be 25 but add a margin
+        end=now - datetime.timedelta(minutes=5), # should be 15 but add a margin
         interval='1m'
     ).sort_index()
     if data.empty:
