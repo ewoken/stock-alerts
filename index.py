@@ -24,6 +24,6 @@ if is_first_run_of_day:
     database.delete_all_notifications(db)
 
 for symbol, alerts in groupby(all_alerts, lambda x: x['symbol']):
-    alert_service.handle_symbol_alerts(symbol, list(alerts))
+    alert_service.handle_symbol_alerts(symbol, list(alerts), now, db)
 
 print('Done !')
