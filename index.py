@@ -20,7 +20,7 @@ if (now.hour < 9 or now.hour > 17 or
 
 db = Database()
 alert_service = AlertService(db)
-all_alerts = db.get_all_alerts(db)
+all_alerts = db.get_all_alerts()
 all_aggregates = db.get_all_aggregates()
 
 aggregates_by_symbol = {}

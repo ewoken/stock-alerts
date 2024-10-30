@@ -28,3 +28,6 @@ class Database:
 
     def delete_all_aggregates(self):
         self.db['aggregates'].delete_many({})
+
+    def raw(self):
+        return self.db
