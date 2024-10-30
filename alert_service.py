@@ -58,9 +58,6 @@ class AlertService:
         high_price_ratio = data['High'] / mean_price_value
         low_price_ratio = data['Low'] / mean_price_value
 
-        print(last_price_ratio)
-        print(high_price_ratio)
-
         if alert['direction'] == 'up':
             detected = (last_price_ratio < alert['value']) & (high_price_ratio >= alert['value'])
         elif alert['direction'] == 'down':
