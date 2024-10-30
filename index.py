@@ -33,6 +33,6 @@ if is_first:
 
 for symbol, alerts in groupby(all_alerts, lambda x: x['symbol']):
     aggregates_dict = aggregates_by_symbol.get(symbol, {})
-    alert_service.handle_symbol_alerts(list(alerts), now)
+    alert_service.handle_symbol_alerts(list(alerts), aggregates_dict, now)
 
 print('Done !')
