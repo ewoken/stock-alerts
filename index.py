@@ -21,12 +21,18 @@ if (now.hour < 9 or now.hour > 17 or
 db = Database()
 alert_service = AlertService(db)
 all_alerts = db.get_all_alerts(db)
+all_aggregates = db.get_all_aggregates()
+
+aggregates_by_symbol = {}
+for symbol, aggregates in groupby(all_aggregates, lambda x: x['symbol']):
+    aggregates_by_symbol[symbol] = { agg['indicator']: agg['value'] for agg in aggregates }
 
 if is_first:
     telegram.send_message(f'Good morning ! {len(all_alerts)} alerts registered')
     db.delete_all_notifications()
 
 for symbol, alerts in groupby(all_alerts, lambda x: x['symbol']):
+    aggregates_dict = aggregates_by_symbol.get(symbol, {})
     alert_service.handle_symbol_alerts(list(alerts), now)
 
 print('Done !')
