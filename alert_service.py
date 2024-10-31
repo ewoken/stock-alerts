@@ -10,7 +10,7 @@ indicator_types = [
 
 # data from yfinance is available with a delay of 15 minutes
 def is_first_run_of_day(now):
-    return now.hour == 9 and now.minute < 20
+    return now.hour == 9 and now.minute < 25
 
 def get_link(symbol):
     if symbol.endswith('.PA'):
