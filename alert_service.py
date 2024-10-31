@@ -10,7 +10,7 @@ indicator_types = [
 
 # data from yfinance is available with a delay of 15 minutes
 def is_first_run_of_day(now):
-    return now.hour == 9 and now.minute < 10
+    return now.hour == 9 and now.minute < 20
 
 def get_link(symbol):
     if symbol.endswith('.PA'):
@@ -94,7 +94,8 @@ class AlertService:
                 self.detect_price_alert(alert, data)
             elif alert['indicator'] == 'mean_price_ratio':
                 if 'mean_price_ratio' not in aggregates:
-                    raise ValueError('mean_price_ratio not computed')
+                    print(f'No mean_price_ratio for {symbol}')
+                    continue
                 self.detect_mean_price_ratio_alert(alert, data, aggregates['mean_price_ratio'])
             else:
                 raise ValueError(f'Unknown indicator {alert["indicator"]}')
