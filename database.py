@@ -29,5 +29,11 @@ class Database:
     def delete_all_aggregates(self):
         self.db['aggregates'].delete_many({})
 
+    def get_all_volume_alerts(self):
+        return self.db['volume-alerts'].find({}).to_list(None)
+    
+    def update_volume_alert(self, alert_id, value):
+        self.db['volume-alerts'].update_one({ '_id': alert_id }, { '$set': { 'value': value } })
+
     def raw(self):
         return self.db

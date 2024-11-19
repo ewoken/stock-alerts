@@ -15,6 +15,7 @@ jobs:
       - run:
           command: |
             python index.py
+
   compute-aggregates:
     executor:
       name: python/default
@@ -27,6 +28,19 @@ jobs:
       - run:
           command: |
             python compute_aggregates.py
+
+  detect_volume_alerts:
+    executor:
+      name: python/default
+      tag: 3.10.15
+    steps:
+      - checkout
+      - run: pip install --upgrade pip
+      - python/install-packages:
+        pkg-manager: pip
+      - run:
+          command: |
+            python detect_volume_alerts.py
 
 workflows:
   send-alerts-workflow:
@@ -50,3 +64,14 @@ workflows:
                 - main
     jobs:
       - compute-aggregates
+
+  detect-volume-alerts-workflow:
+    triggers:
+      - schedule:
+          cron: "0 18 * * 1-5"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - detect_volume_alerts
