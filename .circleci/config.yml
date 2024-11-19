@@ -32,7 +32,7 @@ workflows:
   send-alerts-workflow:
     triggers:
       - schedule:
-          cron: "0,10,20,30,40,50 7-17 * * 1-5"
+          cron: "0,10,20,30,40,50 7-16 * * 1-5"
           filters:
             branches:
               only:
