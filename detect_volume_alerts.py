@@ -16,9 +16,9 @@ for i, alert in enumerate(all_volume_alerts):
         continue
 
     last_volume = data['Volume'].iloc[-1]
-    last_growth = data['Close'].pct_change().iloc[-1]
+    # last_growth = data['Close'].pct_change().iloc[-1]
     
-    if last_volume > alert['value'] and last_growth > 0:
+    if last_volume > alert['value']: # and last_growth > 0:
         message = f'Volume on [{symbol}]({get_link(symbol)}) is high !'
         telegram.send_message(message, {
             "no_webpage": True,
